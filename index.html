@@ -84,49 +84,65 @@
             background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
         }
 
-        /* Estilo do Card de Localização */
-        .location-card {
+        /* Estilo do Card de Localização Premium */
+        .location-card-premium {
             background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(74, 93, 35, 0.15);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .location-card-premium::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 6px; height: 100%;
+            background: linear-gradient(to bottom, var(--olive), var(--rust));
+        }
+
+        .btn-maps {
+            background: #4285F4;
+            transition: all 0.3s ease;
+        }
+
+        .btn-maps:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
 
-<header class="text-center mb-12 relative">
-    <div class="flex justify-center mb-6">
-        <div class="relative group">
+<div class="main-frame p-4 sm:p-10">
+    <header class="text-center mb-12 relative">
+        <div class="flex justify-center mb-6">
             <img src="image/Capturar.PNG" alt="Cozinha Serrão" 
-                 class="w-44 sm:w-52 mx-auto drop-shadow-[0_5px_15px_rgba(74,93,35,0.2)] transition-transform duration-500 group-hover:scale-105">
+                 class="w-44 sm:w-52 mx-auto drop-shadow-[0_5px_15px_rgba(74,93,35,0.2)]">
         </div>
-    </div>
 
-    <div class="relative inline-block mb-4">
-        <h1 class="font-serif text-4xl sm:text-5xl text-[var(--olive)] italic font-bold tracking-tight leading-none">
-            Cozinha Serrão
-        </h1>
-        <div class="flex items-center justify-center gap-1 mt-2">
-            <div class="h-[2px] w-12 bg-gradient-to-r from-transparent to-[var(--rust)] opacity-40"></div>
-            <span class="text-[var(--rust)] text-lg">✦</span>
-            <div class="h-[2px] w-12 bg-gradient-to-l from-transparent to-[var(--rust)] opacity-40"></div>
+        <div class="relative inline-block mb-4">
+            <h1 class="font-serif text-4xl sm:text-5xl text-[var(--olive)] italic font-bold tracking-tight leading-none">
+                Cozinha Serrão
+            </h1>
+            <div class="flex items-center justify-center gap-1 mt-2">
+                <div class="h-[2px] w-12 bg-gradient-to-r from-transparent to-[var(--rust)] opacity-40"></div>
+                <span class="text-[var(--rust)] text-lg">✦</span>
+                <div class="h-[2px] w-12 bg-gradient-to-l from-transparent to-[var(--rust)] opacity-40"></div>
+            </div>
         </div>
-    </div>
 
-    <div class="max-w-xs mx-auto">
-        <p class="text-[var(--rust)] font-bold text-[9px] sm:text-[10px] uppercase tracking-[4px] mb-3 leading-relaxed">
-            Gastronomia Afetiva & Tradição
-        </p>
-        
-        <div class="flex items-center justify-center gap-4 py-2 border-y border-[var(--olive)]/10">
-            <span class="text-[10px] sm:text-xs text-[var(--olive)] font-semibold tracking-widest uppercase">
-                Sex • Sáb • Dom
-            </span>
+        <div class="max-w-xs mx-auto">
+            <p class="text-[var(--rust)] font-bold text-[9px] sm:text-[10px] uppercase tracking-[4px] mb-3 leading-relaxed">
+                Gastronomia Afetiva & Tradição
+            </p>
+            <div class="flex items-center justify-center gap-4 py-2 border-y border-[var(--olive)]/10">
+                <span class="text-[10px] sm:text-xs text-[var(--olive)] font-semibold tracking-widest uppercase">
+                    Sex • Sáb • Dom
+                </span>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 
     <section>
         <div class="mb-6 border-b-2 border-stone-200 pb-4">
@@ -203,26 +219,25 @@
             </div>
 
             <div id="card-retirada" class="hidden sm:col-span-2 mt-2">
-                <div class="location-card">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="bg-[var(--olive)] text-white p-2 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        </div>
+                <div class="location-card-premium p-6 shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
                         <div>
-                            <h4 class="font-bold text-stone-800 text-sm">Nossa Localização</h4>
-                            <p class="text-[11px] text-stone-500">Estamos prontos para te receber!</p>
+                            <span class="text-[var(--olive)] font-bold text-[10px] uppercase tracking-widest bg-[var(--olive)]/10 px-3 py-1 rounded-full">Ponto de Retirada</span>
+                            <h4 class="font-serif text-2xl text-[var(--olive)] italic font-bold mt-2">Cozinha Serrão</h4>
+                        </div>
+                        <div class="text-[var(--rust)] opacity-20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                         </div>
                     </div>
-                    <p class="text-xs text-stone-600 mb-4 leading-relaxed">
-                        Cozinha Serrão - Rua Nova Betel, Jardim São Cristovão -  São Luís MA<br>
-                       
+                    
+                    <p class="text-sm text-stone-600 mb-6 leading-relaxed">
+                        <strong class="text-stone-800">Rua Nova Betel</strong><br>
+                        Jardim São Cristovão - São Luís, MA
                     </p>
-                    <a href=https://www.google.com/maps/@-2.5741988,-44.220601,3a,75y,14.25h,83.38t/data=!3m7!1e1!3m5!1sviyJ5DAllfLlfpPQp4Nc8Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D6.620670080737611%26panoid%3DviyJ5DAllfLlfpPQp4Nc8Q%26yaw%3D14.245762612647773!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                        ABRIR NO GOOGLE MAPS
+
+                    <a href="https://www.google.com/maps/@-2.5741988,-44.220601,3a,75y,14.25h,83.38t/data=!3m7!1e1!3m5!1sviyJ5DAllfLlfpPQp4Nc8Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D6.620670080737611%26panoid%3DviyJ5DAllfLlfpPQp4Nc8Q%26yaw%3D14.245762612647773!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MDQyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn-maps w-full py-4 rounded-2xl text-white font-bold text-xs flex items-center justify-center gap-3 shadow-md tracking-widest uppercase">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
+                        Abrir no Google Maps
                     </a>
                 </div>
             </div>
