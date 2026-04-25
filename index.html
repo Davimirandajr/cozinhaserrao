@@ -83,6 +83,15 @@
         .btn-whatsapp {
             background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
         }
+
+        /* Estilo do Card de Localização */
+        .location-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -147,7 +156,7 @@
     </section>
 
     <section class="bg-white/60 p-4 sm:p-8 rounded-2xl border border-stone-200 shadow-inner mb-24">
-        <h2 class="font-serif text-xl text-[var(--olive)] mb-6 text-center italic">Dados de Entrega</h2>
+        <h2 class="font-serif text-xl text-[var(--olive)] mb-6 text-center italic">Finalizar Pedido</h2>
         
         <div class="flex gap-2 mb-6">
             <button id="btn-entrega" onclick="setMetodo('entrega')" class="method-active flex-1 py-3 rounded-xl font-bold border-2 text-[10px] sm:text-xs tracking-wider shadow-sm uppercase">🛵 Entrega</button>
@@ -155,23 +164,44 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="space-y-1">
-                <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Nome do Cliente</label>
-                <input type="text" id="nome" placeholder="Seu nome" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
+            <div class="space-y-1 sm:col-span-2">
+                <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Seu Nome</label>
+                <input type="text" id="nome" placeholder="Como podemos te chamar?" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
             </div>
-            <div class="space-y-1">
-                <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Ponto de Referência</label>
-                <input type="text" id="ref" placeholder="Ex: Próximo ao mercado" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
+
+            <div id="campos-entrega" class="sm:col-span-2 space-y-4">
+                <div class="space-y-1">
+                    <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Ponto de Referência</label>
+                    <input type="text" id="ref" placeholder="Ex: Próximo ao mercado" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Endereço Completo</label>
+                    <input type="text" id="endereco" placeholder="Rua, Número e Bairro" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
+                </div>
             </div>
-            <div class="sm:col-span-2 space-y-3" id="secao-endereco">
-                <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Endereço</label>
-                <input type="text" id="endereco" placeholder="Rua, Número e Bairro" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
-                
-                <div class="bg-[var(--olive)]/10 p-3 rounded-xl border border-[var(--olive)]/20 flex items-start gap-3">
-                    <span class="text-xl">📍</span>
-                    <p class="text-[11px] text-[var(--olive-dark)] leading-tight">
-                        <strong>Dica:</strong> Para entregas mais rápidas, você pode enviar sua <b>localização atual</b> pelo WhatsApp logo após enviar este pedido.
+
+            <div id="card-retirada" class="hidden sm:col-span-2 mt-2">
+                <div class="location-card">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="bg-[var(--olive)] text-white p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-stone-800 text-sm">Nossa Localização</h4>
+                            <p class="text-[11px] text-stone-500">Estamos prontos para te receber!</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-stone-600 mb-4 leading-relaxed">
+                        Cozinha Serrão - Endereço Completo Aqui, Nº 000<br>
+                        Bairro, Cidade - MA
                     </p>
+                    <a href="https://maps.app.goo.gl/vjX2A56hFfK4vC4U9" target="_blank" class="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold text-xs transition-colors shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        ABRIR NO GOOGLE MAPS
+                    </a>
                 </div>
             </div>
         </div>
@@ -199,33 +229,32 @@
         metodo = tipo;
         const btnE = document.getElementById('btn-entrega');
         const btnR = document.getElementById('btn-retirada');
-        const secaoEnd = document.getElementById('secao-endereco');
+        const camposEntrega = document.getElementById('campos-entrega');
+        const cardRetirada = document.getElementById('card-retirada');
 
         if(tipo === 'entrega') {
             btnE.classList.add('method-active');
             btnR.classList.remove('method-active');
-            if(secaoEnd) secaoEnd.classList.remove('hidden');
+            camposEntrega.classList.remove('hidden');
+            cardRetirada.classList.add('hidden');
         } else {
             btnR.classList.add('method-active');
             btnE.classList.remove('method-active');
-            if(secaoEnd) secaoEnd.classList.add('hidden');
+            camposEntrega.classList.add('hidden');
+            cardRetirada.classList.remove('hidden');
         }
     }
 
     function adicionar(nome, selectId, e) {
         const evento = e || window.event;
         const select = document.getElementById(selectId);
-        if (!select) return;
-
         const preco = parseFloat(select.value);
         const tamanho = select.options[select.selectedIndex].text.split(' - ')[0];
         
         sacola.push({ item: `${nome} (${tamanho})`, preco });
         total += preco;
         
-        const bar = document.getElementById('carrinho-bar');
-        if (bar) bar.style.transform = "translateY(0)";
-        
+        document.getElementById('carrinho-bar').style.transform = "translateY(0)";
         document.getElementById('itens-qtd').innerText = `${sacola.length} ITEM(NS)`;
         document.getElementById('total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         
@@ -234,10 +263,7 @@
             const originalText = btn.innerText;
             btn.innerText = "✓ Adicionado!";
             btn.style.backgroundColor = "#000";
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.backgroundColor = ""; 
-            }, 1000);
+            setTimeout(() => { btn.innerText = originalText; btn.style.backgroundColor = ""; }, 1000);
         }
     }
 
@@ -248,17 +274,12 @@
 
         if (sacola.length === 0) return alert("Sua sacola está vazia!");
         if (!nome) return alert("Por favor, informe seu nome.");
-        
-        if (metodo === 'entrega' && !end) {
-            if(!confirm("Deseja enviar o pedido sem endereço e compartilhar a localização pelo WhatsApp depois?")) {
-                return;
-            }
-        }
+        if (metodo === 'entrega' && !end) return alert("Informe o endereço para entrega.");
 
         const resumo = sacola.map(i => `• *${i.item}*`).join('\n');
         const infoMetodo = metodo === 'entrega' 
-            ? `📍 *ENTREGA:* ${end || 'Localização enviada em seguida'}\n🏠 *REF:* ${ref || 'Não informada'}` 
-            : `🏢 *RETIRADA:* Vou buscar no local`;
+            ? `📍 *ENTREGA:* ${end}\n🏠 *REF:* ${ref || 'Não informada'}` 
+            : `🏢 *RETIRADA:* Vou buscar no local (Cozinha Serrão)`;
 
         const msg = encodeURIComponent(
             `🥘 *COZINHA SERRÃO - NOVO PEDIDO*\n` +
@@ -269,7 +290,7 @@
             `🛒 *PEDIDO:* \n${resumo}\n\n` +
             `💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n` +
             `━━━━━━━━━━━━━━━━━━━━\n` +
-            `👉 _Vou enviar a localização atual logo abaixo!_`
+            (metodo === 'entrega' ? `👉 _Vou enviar a localização em seguida!_` : `👉 _Chego em breve para retirar!_`)
         );
 
         window.open(`https://wa.me/5598981576036?text=${msg}`);
