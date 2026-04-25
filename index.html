@@ -6,7 +6,7 @@
     <title>Cozinha Serrão </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
+ <style>
     :root { 
         --olive: #4a5d23; 
         --olive-dark: #36441a;
@@ -20,7 +20,7 @@
         font-family: 'Poppins', sans-serif;
         background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png');
         margin: 0;
-        padding: 0; /* Mobile-first: sem padding nas bordas */
+        padding: 0;
     }
     
     .main-frame {
@@ -28,13 +28,12 @@
         background-image: var(--paper-texture);
         max-width: 850px;
         margin: 0 auto;
-        border: 8px solid white; /* Moldura menor no mobile */
+        border: 8px solid white;
         outline: 1px solid rgba(74, 93, 35, 0.2);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         min-height: 100vh;
     }
 
-    /* Ajustes para Desktop */
     @media (min-width: 640px) {
         body { padding: 20px; }
         .main-frame { 
@@ -52,13 +51,10 @@
         border-radius: 12px;
         border: 1px solid #e5e7eb;
         overflow: hidden;
-        display: flex;
-        flex-direction: column;
     }
 
-    /* Melhora o toque no mobile */
     input, select, button {
-        font-size: 16px !important; /* Impede zoom forçado no iOS */
+        font-size: 16px !important;
         min-height: 48px;
     }
 
@@ -66,17 +62,12 @@
         background-color: var(--olive) !important;
         color: white !important;
         border-color: var(--olive-dark) !important;
-        transform: translateY(-2px);
-    }
-
-    .btn-whatsapp {
-        background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-        transition: all 0.3s ease;
     }
 
     #carrinho-bar {
         backdrop-filter: blur(10px);
         background: rgba(255, 255, 255, 0.95);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 </style>
 </head>
@@ -182,81 +173,81 @@
         if(tipo === 'entrega') {
             btnE.classList.add('method-active');
             btnR.classList.remove('method-active');
-            secaoEnd.classList.remove('hidden');
+            if(secaoEnd) secaoEnd.classList.remove('hidden');
         } else {
             btnR.classList.add('method-active');
             btnE.classList.remove('method-active');
-            secaoEnd.classList.add('hidden');
+            if(secaoEnd) secaoEnd.classList.add('hidden');
         }
     }
 
-    // Adicionei o parâmetro 'e' para capturar o evento de clique corretamente
     function adicionar(nome, selectId, e) {
-        // Se o evento não for passado, tentamos pegar o global (fallback)
         const evento = e || window.event;
         const select = document.getElementById(selectId);
+        if (!select) return; // Segurança caso o ID do select esteja errado
+
         const preco = parseFloat(select.value);
         const tamanho = select.options[select.selectedIndex].text.split(' - ')[0];
         
         sacola.push({ item: `${nome} (${tamanho})`, preco });
         total += preco;
         
-        // Atualiza a barra do carrinho
+        // CORREÇÃO DO ERRO DE NULL:
         const bar = document.getElementById('carrinho-bar');
-        bar.style.transform = "translateY(0)";
+        if (bar) {
+            bar.style.transform = "translateY(0)";
+        }
         
-        document.getElementById('itens-qtd').innerText = `${sacola.length} ITEM(NS) SELECIONADOS`;
-        document.getElementById('total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        const qtdEl = document.getElementById('itens-qtd');
+        const totalEl = document.getElementById('total-val');
         
-        // Feedback visual no botão que foi clicado
+        if(qtdEl) qtdEl.innerText = `${sacola.length} ITEM(NS) SELECIONADOS`;
+        if(totalEl) totalEl.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        
+        // Feedback visual no botão
         if (evento && evento.target) {
             const btn = evento.target;
             const originalText = btn.innerText;
             btn.innerText = "✓ Adicionado!";
-            btn.style.backgroundColor = "#000"; // Feedback rápido em preto
+            const corOriginal = btn.style.backgroundColor;
+            btn.style.backgroundColor = "#000";
             
             setTimeout(() => {
                 btn.innerText = originalText;
-                btn.style.backgroundColor = ""; // Volta para a cor do CSS (olive)
+                btn.style.backgroundColor = corOriginal;
             }, 1000);
         }
     }
 
     async function pegarLocalizacao() {
         const field = document.getElementById('endereco');
-        const btn = document.querySelector('button[onclick="pegarLocalizacao()"]');
-        const originalText = btn.innerText;
-        
-        btn.innerText = "⌛ Buscando...";
-        
+        if(!field) return;
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (pos) => {
                 try {
                     const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`);
                     const data = await res.json();
-                    // Pega partes essenciais do endereço
-                    const enderecoFormatado = data.display_name.split(',').slice(0,4).join(',');
-                    field.value = enderecoFormatado;
-                    btn.innerText = "📍 Localização Atualizada!";
+                    field.value = data.display_name.split(',').slice(0,4).join(',');
                 } catch (err) {
-                    alert("Erro ao converter coordenadas.");
-                    btn.innerText = originalText;
+                    alert("Não foi possível obter o endereço exato.");
                 }
-            }, () => {
-                alert("GPS negado ou indisponível.");
-                btn.innerText = originalText;
             });
         }
     }
 
     function finalizarPedido() {
-        const nome = document.getElementById('nome').value.trim();
-        const end = document.getElementById('endereco').value.trim();
-        const ref = document.getElementById('ref').value.trim();
+        const nomeEl = document.getElementById('nome');
+        const endEl = document.getElementById('endereco');
+        const refEl = document.getElementById('ref');
+
+        const nome = nomeEl ? nomeEl.value.trim() : "";
+        const end = endEl ? endEl.value.trim() : "";
+        const ref = refEl ? refEl.value.trim() : "";
 
         if (sacola.length === 0) return alert("Sua sacola está vazia!");
         if (!nome) return alert("Por favor, informe seu nome.");
-        if (metodo === 'entrega' && !end) return alert("Informe o endereço para entrega.");
+        if (metodo === 'entrega' && !end) return alert("Informe o endereço de entrega.");
 
         const resumo = sacola.map(i => `• *${i.item}*`).join('\n');
         const infoMetodo = metodo === 'entrega' 
