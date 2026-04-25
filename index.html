@@ -168,104 +168,115 @@
     </section>
 </div>
 
-    <script>
-        let sacola = [];
-        let total = 0;
-        let metodo = 'entrega';
+<script>
+    let sacola = [];
+    let total = 0;
+    let metodo = 'entrega';
 
-        function setMetodo(tipo) {
-            metodo = tipo;
-            const btnE = document.getElementById('btn-entrega');
-            const btnR = document.getElementById('btn-retirada');
-            const secaoEnd = document.getElementById('secao-endereco');
+    function setMetodo(tipo) {
+        metodo = tipo;
+        const btnE = document.getElementById('btn-entrega');
+        const btnR = document.getElementById('btn-retirada');
+        const secaoEnd = document.getElementById('secao-endereco');
 
-            if(tipo === 'entrega') {
-                btnE.classList.add('method-active');
-                btnR.classList.remove('method-active');
-                secaoEnd.classList.remove('hidden');
-            } else {
-                btnR.classList.add('method-active');
-                btnE.classList.remove('method-active');
-                secaoEnd.classList.add('hidden');
-            }
+        if(tipo === 'entrega') {
+            btnE.classList.add('method-active');
+            btnR.classList.remove('method-active');
+            secaoEnd.classList.remove('hidden');
+        } else {
+            btnR.classList.add('method-active');
+            btnE.classList.remove('method-active');
+            secaoEnd.classList.add('hidden');
         }
+    }
 
-        function adicionar(nome, selectId) {
-            const select = document.getElementById(selectId);
-            const preco = parseFloat(select.value);
-            const tamanho = select.options[select.selectedIndex].text.split(' - ')[0];
-            
-            sacola.push({ item: `${nome} (${tamanho})`, preco });
-            total += preco;
-            
-            // Animação da barra surgindo
-            const bar = document.getElementById('carrinho-bar');
-            bar.style.transform = "translateY(0)";
-            
-            document.getElementById('itens-qtd').innerText = `${sacola.length} ITEM(NS) SELECIONADOS`;
-            document.getElementById('total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-            
-            // Pequeno feedback no botão
-            const btn = event.target;
+    // Adicionei o parâmetro 'e' para capturar o evento de clique corretamente
+    function adicionar(nome, selectId, e) {
+        // Se o evento não for passado, tentamos pegar o global (fallback)
+        const evento = e || window.event;
+        const select = document.getElementById(selectId);
+        const preco = parseFloat(select.value);
+        const tamanho = select.options[select.selectedIndex].text.split(' - ')[0];
+        
+        sacola.push({ item: `${nome} (${tamanho})`, preco });
+        total += preco;
+        
+        // Atualiza a barra do carrinho
+        const bar = document.getElementById('carrinho-bar');
+        bar.style.transform = "translateY(0)";
+        
+        document.getElementById('itens-qtd').innerText = `${sacola.length} ITEM(NS) SELECIONADOS`;
+        document.getElementById('total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        
+        // Feedback visual no botão que foi clicado
+        if (evento && evento.target) {
+            const btn = evento.target;
             const originalText = btn.innerText;
             btn.innerText = "✓ Adicionado!";
-            btn.classList.replace('bg-[var(--olive)]', 'bg-black');
+            btn.style.backgroundColor = "#000"; // Feedback rápido em preto
+            
             setTimeout(() => {
                 btn.innerText = originalText;
-                btn.classList.replace('bg-black', 'bg-[var(--olive)]');
+                btn.style.backgroundColor = ""; // Volta para a cor do CSS (olive)
             }, 1000);
         }
+    }
 
-        async function pegarLocalizacao() {
-            const field = document.getElementById('endereco');
-            const btn = event.target;
-            btn.innerText = "Buscando localização...";
-            
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async (pos) => {
-                    try {
-                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`);
-                        const data = await res.json();
-                        field.value = data.display_name.split(',').slice(0,4).join(',');
-                        btn.innerText = "📍 Localização Atualizada!";
-                    } catch (e) {
-                        alert("Erro ao buscar endereço.");
-                        btn.innerText = "📍 Tentar Novamente";
-                    }
-                }, () => {
-                    alert("Acesso negado ao GPS.");
-                    btn.innerText = "📍 GPS Desativado";
-                });
-            }
+    async function pegarLocalizacao() {
+        const field = document.getElementById('endereco');
+        const btn = document.querySelector('button[onclick="pegarLocalizacao()"]');
+        const originalText = btn.innerText;
+        
+        btn.innerText = "⌛ Buscando...";
+        
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                try {
+                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`);
+                    const data = await res.json();
+                    // Pega partes essenciais do endereço
+                    const enderecoFormatado = data.display_name.split(',').slice(0,4).join(',');
+                    field.value = enderecoFormatado;
+                    btn.innerText = "📍 Localização Atualizada!";
+                } catch (err) {
+                    alert("Erro ao converter coordenadas.");
+                    btn.innerText = originalText;
+                }
+            }, () => {
+                alert("GPS negado ou indisponível.");
+                btn.innerText = originalText;
+            });
         }
+    }
 
-        function finalizarPedido() {
-            const nome = document.getElementById('nome').value;
-            const end = document.getElementById('endereco').value;
-            const ref = document.getElementById('ref').value;
+    function finalizarPedido() {
+        const nome = document.getElementById('nome').value.trim();
+        const end = document.getElementById('endereco').value.trim();
+        const ref = document.getElementById('ref').value.trim();
 
-            if (!nome) return alert("Por favor, preencha seu nome.");
-            if (metodo === 'entrega' && !end) return alert("Preencha o endereço de entrega.");
+        if (sacola.length === 0) return alert("Sua sacola está vazia!");
+        if (!nome) return alert("Por favor, informe seu nome.");
+        if (metodo === 'entrega' && !end) return alert("Informe o endereço para entrega.");
 
-            const resumo = sacola.map(i => `• *${i.item}*`).join('\n');
-            const infoMetodo = metodo === 'entrega' 
-                ? `📍 *ENTREGA EM:* ${end}\n🏠 *REF:* ${ref}` 
-                : `🏢 *RETIRADA:* Vou buscar no local`;
+        const resumo = sacola.map(i => `• *${i.item}*`).join('\n');
+        const infoMetodo = metodo === 'entrega' 
+            ? `📍 *ENTREGA EM:* ${end}\n🏠 *REF:* ${ref}` 
+            : `🏢 *RETIRADA:* Vou buscar no local`;
 
-            const msg = encodeURIComponent(
-                `🥘 *COZINHA SERRÃO - NOVO PEDIDO*\n` +
-                `━━━━━━━━━━━━━━━━━━━━\n` +
-                `👤 *CLIENTE:* ${nome}\n` +
-                `${infoMetodo}\n` +
-                `━━━━━━━━━━━━━━━━━━━━\n` +
-                `🛒 *PEDIDO:* \n${resumo}\n\n` +
-                `💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n` +
-                `━━━━━━━━━━━━━━━━━━━━\n` +
-                `_Aguardando confirmação e chave PIX._`
-            );
+        const msg = encodeURIComponent(
+            `🥘 *COZINHA SERRÃO - NOVO PEDIDO*\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `👤 *CLIENTE:* ${nome}\n` +
+            `${infoMetodo}\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `🛒 *PEDIDO:* \n${resumo}\n\n` +
+            `💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `_Aguardando confirmação e chave PIX._`
+        );
 
-            window.open(`https://wa.me/5598981576036?text=${msg}`);
-        }
-    </script>
+        window.open(`https://wa.me/5598981576036?text=${msg}`);
+    }
+</script>
 </body>
 </html>
