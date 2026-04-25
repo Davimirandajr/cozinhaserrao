@@ -66,7 +66,6 @@
             border-color: var(--olive-dark) !important;
         }
 
-        /* Barra do Carrinho */
         #carrinho-bar {
             position: fixed;
             bottom: 0;
@@ -147,7 +146,7 @@
         </div>
     </section>
 
-    <section class="bg-white/60 p-4 sm:p-8 rounded-2xl border border-stone-200 shadow-inner mb-20">
+    <section class="bg-white/60 p-4 sm:p-8 rounded-2xl border border-stone-200 shadow-inner mb-24">
         <h2 class="font-serif text-xl text-[var(--olive)] mb-6 text-center italic">Dados de Entrega</h2>
         
         <div class="flex gap-2 mb-6">
@@ -158,17 +157,22 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1">
                 <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Nome do Cliente</label>
-                <input type="text" id="nome" placeholder="Ex: Davi Gomes" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
+                <input type="text" id="nome" placeholder="Seu nome" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
             </div>
             <div class="space-y-1">
-                <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Referência</label>
-                <input type="text" id="ref" placeholder="Ex: Perto da praça" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
+                <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Ponto de Referência</label>
+                <input type="text" id="ref" placeholder="Ex: Próximo ao mercado" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
             </div>
             <div class="sm:col-span-2 space-y-3" id="secao-endereco">
-                <button onclick="pegarLocalizacao()" class="w-full bg-white border-2 border-[var(--olive)] text-[var(--olive)] py-3 rounded-xl font-bold text-xs shadow-sm active:scale-95 transition-transform">
-                    📍 Localização via GPS
-                </button>
+                <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Endereço</label>
                 <input type="text" id="endereco" placeholder="Rua, Número e Bairro" class="w-full p-3 rounded-xl border-stone-200 bg-white focus:outline-[var(--olive)]">
+                
+                <div class="bg-[var(--olive)]/10 p-3 rounded-xl border border-[var(--olive)]/20 flex items-start gap-3">
+                    <span class="text-xl">📍</span>
+                    <p class="text-[11px] text-[var(--olive-dark)] leading-tight">
+                        <strong>Dica:</strong> Para entregas mais rápidas, você pode enviar sua <b>localização atual</b> pelo WhatsApp logo após enviar este pedido.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
@@ -177,10 +181,10 @@
 <div id="carrinho-bar">
     <div class="max-w-[850px] mx-auto flex items-center justify-between gap-4">
         <div class="flex flex-col">
-            <span id="itens-qtd" class="text-[10px] font-bold text-[var(--olive)] uppercase">0 ITEM(NS) SELECIONADOS</span>
+            <span id="itens-qtd" class="text-[10px] font-bold text-[var(--olive)] uppercase">0 ITEM(NS)</span>
             <span id="total-val" class="text-xl font-black text-stone-800">R$ 0,00</span>
         </div>
-        <button onclick="finalizarPedido()" class="btn-whatsapp flex-1 sm:flex-none px-6 py-3 text-white rounded-xl font-bold flex items-center justify-center gap-2 text-sm">
+        <button onclick="finalizarPedido()" class="btn-whatsapp flex-1 sm:flex-none px-6 py-3 text-white rounded-xl font-bold flex items-center justify-center gap-2 text-sm shadow-lg active:scale-95 transition-transform">
             FINALIZAR PEDIDO
         </button>
     </div>
@@ -220,43 +224,20 @@
         total += preco;
         
         const bar = document.getElementById('carrinho-bar');
-        if (bar) {
-            bar.style.transform = "translateY(0)";
-        }
+        if (bar) bar.style.transform = "translateY(0)";
         
-        const qtdEl = document.getElementById('itens-qtd');
-        const totalEl = document.getElementById('total-val');
-        
-        if(qtdEl) qtdEl.innerText = `${sacola.length} ITEM(NS) SELECIONADOS`;
-        if(totalEl) totalEl.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        document.getElementById('itens-qtd').innerText = `${sacola.length} ITEM(NS)`;
+        document.getElementById('total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         
         if (evento && evento.target) {
             const btn = evento.target;
             const originalText = btn.innerText;
             btn.innerText = "✓ Adicionado!";
             btn.style.backgroundColor = "#000";
-            
             setTimeout(() => {
                 btn.innerText = originalText;
                 btn.style.backgroundColor = ""; 
             }, 1000);
-        }
-    }
-
-    async function pegarLocalizacao() {
-        const field = document.getElementById('endereco');
-        if(!field) return;
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                try {
-                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`);
-                    const data = await res.json();
-                    field.value = data.display_name.split(',').slice(0,4).join(',');
-                } catch (err) {
-                    alert("Não foi possível obter o endereço exato.");
-                }
-            });
         }
     }
 
@@ -267,11 +248,16 @@
 
         if (sacola.length === 0) return alert("Sua sacola está vazia!");
         if (!nome) return alert("Por favor, informe seu nome.");
-        if (metodo === 'entrega' && !end) return alert("Informe o endereço de entrega.");
+        
+        if (metodo === 'entrega' && !end) {
+            if(!confirm("Deseja enviar o pedido sem endereço e compartilhar a localização pelo WhatsApp depois?")) {
+                return;
+            }
+        }
 
         const resumo = sacola.map(i => `• *${i.item}*`).join('\n');
         const infoMetodo = metodo === 'entrega' 
-            ? `📍 *ENTREGA EM:* ${end}\n🏠 *REF:* ${ref}` 
+            ? `📍 *ENTREGA:* ${end || 'Localização enviada em seguida'}\n🏠 *REF:* ${ref || 'Não informada'}` 
             : `🏢 *RETIRADA:* Vou buscar no local`;
 
         const msg = encodeURIComponent(
@@ -283,7 +269,7 @@
             `🛒 *PEDIDO:* \n${resumo}\n\n` +
             `💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n` +
             `━━━━━━━━━━━━━━━━━━━━\n` +
-            `_Aguardando confirmação e chave PIX._`
+            `👉 _Vou enviar a localização atual logo abaixo!_`
         );
 
         window.open(`https://wa.me/5598981576036?text=${msg}`);
