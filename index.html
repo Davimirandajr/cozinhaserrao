@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cozinha Serrão | Pedido Online</title>
+    <title>Cozinha Serrão </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
+  <style>
     :root { 
         --olive: #4a5d23; 
         --olive-dark: #36441a;
@@ -20,68 +20,46 @@
         font-family: 'Poppins', sans-serif;
         background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png');
         margin: 0;
-        padding: 10px;
+        padding: 0; /* Mobile-first: sem padding nas bordas */
     }
     
-    /* Moldura Dupla Premium Otimizada */
     .main-frame {
         background-color: var(--cream);
         background-image: var(--paper-texture);
         max-width: 850px;
-        margin: 20px auto;
-        /* Simula o paspartu da imagem de referência */
-        border: 15px solid white;
-        outline: 1px solid rgba(74, 93, 35, 0.3);
-        outline-offset: -10px; /* Cria uma linha interna elegante */
-        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.4), inset 0 0 100px rgba(139, 69, 19, 0.05);
-        position: relative;
-        overflow: hidden;
+        margin: 0 auto;
+        border: 8px solid white; /* Moldura menor no mobile */
+        outline: 1px solid rgba(74, 93, 35, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        min-height: 100vh;
+    }
+
+    /* Ajustes para Desktop */
+    @media (min-width: 640px) {
+        body { padding: 20px; }
+        .main-frame { 
+            margin: 20px auto; 
+            border: 15px solid white; 
+            border-radius: 4px;
+            min-height: auto;
+        }
     }
 
     .font-serif { font-family: 'Playfair Display', serif; }
     
-    /* Cards de Produto com Profundidade */
     .product-card {
         background: white;
-        border-radius: 16px;
+        border-radius: 12px;
         border: 1px solid #e5e7eb;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    
-    .product-card:hover { 
-        transform: translateY(-5px); 
-        border-color: var(--olive);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Estilização dos Selects e Inputs */
-    select, input {
-        border: 1.5px solid #e2e8f0 !important;
-        transition: all 0.2s ease !important;
-        outline: none !important;
-    }
-
-    select:focus, input:focus {
-        border-color: var(--olive) !important;
-        box-shadow: 0 0 0 3px rgba(74, 93, 35, 0.1) !important;
-    }
-
-    /* Botão de Adicionar - Estilo mais tátil */
-    .btn-add {
-        background-color: var(--olive);
-        color: white;
-        transition: all 0.3s ease;
-        position: relative;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
-    
-    .btn-add:active { transform: scale(0.95); }
 
-    /* Métodos de Entrega/Retirada */
-    .method-btn {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 2px solid #e2e8f0;
+    /* Melhora o toque no mobile */
+    input, select, button {
+        font-size: 16px !important; /* Impede zoom forçado no iOS */
+        min-height: 48px;
     }
 
     .method-active {
@@ -89,128 +67,106 @@
         color: white !important;
         border-color: var(--olive-dark) !important;
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(74, 93, 35, 0.2);
     }
 
-    /* Barra de WhatsApp Fixa - Estilo Floating Action */
     .btn-whatsapp {
         background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-        box-shadow: 0 10px 20px -5px rgba(37, 211, 102, 0.5);
-        border: none;
+        transition: all 0.3s ease;
     }
 
-    /* Detalhes Decorativos */
-    .divider-fancy {
-        height: 1px;
-        background: linear-gradient(to right, transparent, var(--olive), transparent);
-        opacity: 0.3;
-        margin: 2rem 0;
+    #carrinho-bar {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
     }
 </style>
 </head>
 <body class="p-2 sm:p-6">
 
-    <div class="main-frame p-5 sm:p-10 rounded-sm">
-        <header class="text-center mb-10">
-            <img src="image/Capturar.PNG" alt="Cozinha Serrão" class="w-56 mx-auto mb-4 drop-shadow-sm">
-            <div class="flex items-center justify-center gap-3 italic text-[var(--olive)] opacity-80">
-                <div class="h-[1px] w-10 bg-[var(--olive)]"></div>
-                <span class="text-xs uppercase tracking-widest font-bold">Sexta, Sábado e Domingo</span>
-                <div class="h-[1px] w-10 bg-[var(--olive)]"></div>
-            </div>
-        </header>
-
-        <section>
-            <div class="mb-8 border-b-2 border-stone-200 pb-4">
-    <span class="text-[var(--rust)] font-bold text-[10px] uppercase tracking-[3px] block mb-1">Tradição & Tempero</span>
-    <h2 class="font-serif text-3xl text-[var(--olive)] italic leading-none">
-        O Sabor de Hoje
-    </h2>
-</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                <div class="product-card flex flex-col overflow-hidden shadow-sm">
-                    <div class="relative">
-                     <img src="https://guiadacozinha.com.br/wp-content/uploads/2020/01/feijoada-completa-tradicional.jpg" class="w-full h-40 object-cover">
-                        <span class="absolute top-2 right-2 bg-white/90 px-2 py-1 rounded text-[10px] font-bold text-[var(--olive)] shadow-sm uppercase">Completa</span>
-                    </div>
-                    <div class="p-4 flex flex-col justify-between flex-1">
-                        <div>
-                            <h3 class="font-bold text-xl text-stone-800">Feijoada no Balde</h3>
-                            <p class="text-[11px] text-stone-500 mb-4 leading-tight italic">Arroz soltinho, farofa de manteiga e couve mineira.</p>
-                            <select id="size-feijoada" class="w-full p-2.5 text-sm border rounded-lg mb-3 bg-stone-50 border-stone-200 focus:ring-2 focus:ring-[var(--olive)]">
-                                <option value="165.00">1.5L (6 Pessoas) - R$ 165,00</option>
-                                <option value="100.00" selected>750ml (3 Pessoas) - R$ 100,00</option>
-                                <option value="70.00">500ml (2 Pessoas) - R$ 70,00</option>
-                                <option value="35.00">250ml (1 Pessoa) - R$ 35,00</option>
-                            </select>
-                        </div>
-                        <button onclick="adicionar('Feijoada', 'size-feijoada')" class="w-full bg-[var(--olive)] text-white py-2.5 rounded-lg font-bold hover:bg-black transition-colors text-sm shadow-md">Adicionar à Sacola</button>
-                    </div>
-                </div>
-
-                <div class="product-card flex flex-col overflow-hidden shadow-sm">
-                    <div class="relative">
-                       <img src="image/mocoto.jpg" class="w-full h-40 object-cover">
-                        <span class="absolute top-2 right-2 bg-white/90 px-2 py-1 rounded text-[10px] font-bold text-[var(--olive)] shadow-sm uppercase">Tradicional</span>
-                    </div>
-                    <div class="p-4 flex flex-col justify-between flex-1">
-                        <div>
-                            <h3 class="font-bold text-xl text-stone-800">Mocotó no Balde</h3>
-                            <p class="text-[11px] text-stone-500 mb-4 leading-tight italic">Caldo grosso, arroz branco e farofa especial.</p>
-                            <select id="size-mocoto" class="w-full p-2.5 text-sm border rounded-lg mb-3 bg-stone-50 border-stone-200 focus:ring-2 focus:ring-[var(--olive)]">
-                                <option value="165.00">1.5L (6 Pessoas) - R$ 165,00</option>
-                                <option value="100.00" selected>750ml (3 Pessoas) - R$ 100,00</option>
-                                <option value="70.00">500ml (2 Pessoas) - R$ 70,00</option>
-                                <option value="35.00">250ml (1 Pessoa) - R$ 35,00</option>
-                            </select>
-                        </div>
-                        <button onclick="adicionar('Mocotó', 'size-mocoto')" class="w-full bg-[var(--olive)] text-white py-2.5 rounded-lg font-bold hover:bg-black transition-colors text-sm shadow-md">Adicionar à Sacola</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="bg-white/60 p-5 sm:p-8 rounded-3xl border border-stone-200 shadow-inner">
-            <h2 class="font-serif text-2xl text-[var(--olive)] mb-6 text-center italic">Dados de Entrega</h2>
-            
-            <div class="flex gap-3 mb-8">
-                <button id="btn-entrega" onclick="setMetodo('entrega')" class="method-active flex-1 py-3 rounded-2xl font-bold border-2 text-xs sm:text-sm tracking-wide shadow-sm">🛵 ENTREGA</button>
-                <button id="btn-retirada" onclick="setMetodo('retirada')" class="flex-1 py-3 rounded-2xl font-bold border-2 border-stone-200 text-stone-400 bg-white text-xs sm:text-sm tracking-wide">🏢 RETIRADA</button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-stone-400 uppercase ml-2">Nome do Cliente</label>
-                    <input type="text" id="nome" placeholder="Ex: Davi Gomes" class="bg-white border-stone-200 focus:border-[var(--olive)] transition-all">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-stone-400 uppercase ml-2">Referência</label>
-                    <input type="text" id="ref" placeholder="Ex: Perto da praça" class="bg-white border-stone-200 focus:border-[var(--olive)] transition-all">
-                </div>
-                <div class="sm:col-span-2 space-y-4 pt-2" id="secao-endereco">
-                    <button onclick="pegarLocalizacao()" class="w-full bg-white border-2 border-[var(--olive)] text-[var(--olive)] py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[var(--olive)] hover:text-white transition-all text-sm shadow-sm">
-                        📍 Localização Atual via GPS
-                    </button>
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-stone-400 uppercase ml-2">Endereço Completo</label>
-                        <input type="text" id="endereco" placeholder="Rua, Número e Bairro" class="bg-white border-stone-200 focus:border-[var(--olive)] transition-all">
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <div id="carrinho-bar" class="fixed bottom-0 left-0 w-full bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.15)] p-4 transform translate-y-full transition-transform duration-500 ease-out z-50">
-        <div class="max-w-[850px] mx-auto flex items-center justify-between gap-4">
-            <div class="flex flex-col">
-                <span id="itens-qtd" class="text-[10px] font-bold text-[var(--olive)] uppercase tracking-tighter">0 ITENS</span>
-                <span id="total-val" class="text-2xl font-black text-stone-800 leading-none">R$ 0,00</span>
-            </div>
-            <button onclick="finalizarPedido()" class="btn-whatsapp flex-1 sm:flex-none px-6 sm:px-10 py-4 text-white rounded-2xl font-bold flex items-center justify-center gap-2 text-sm sm:text-base">
-                FINALIZAR PEDIDO <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-2.652 0-5.147 1.03-7.021 2.905-1.875 1.875-2.901 4.374-2.903 7.027-.001 2.03.543 3.874 1.595 5.26l-.951 3.474 3.489-.916z"/></svg>
-            </button>
+<div class="main-frame p-4 sm:p-10">
+    <header class="text-center mb-8">
+        <img src="image/Capturar.PNG" alt="Cozinha Serrão" class="w-48 sm:w-56 mx-auto mb-4 drop-shadow-sm">
+        <div class="flex items-center justify-center gap-3 italic text-[var(--olive)] opacity-80">
+            <div class="h-[1px] w-8 bg-[var(--olive)]"></div>
+            <span class="text-[10px] sm:text-xs uppercase tracking-widest font-bold">Sexta, Sábado e Domingo</span>
+            <div class="h-[1px] w-8 bg-[var(--olive)]"></div>
         </div>
-    </div>
+    </header>
+
+    <section>
+        <div class="mb-6 border-b-2 border-stone-200 pb-4">
+            <span class="text-[var(--rust)] font-bold text-[10px] uppercase tracking-[3px] block mb-1">Tradição & Tempero</span>
+            <h2 class="font-serif text-2xl sm:text-3xl text-[var(--olive)] italic leading-none">O Sabor de Hoje</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-12">
+            <div class="product-card shadow-sm">
+                <div class="relative">
+                    <img src="https://guiadacozinha.com.br/wp-content/uploads/2020/01/feijoada-completa-tradicional.jpg" class="w-full h-40 object-cover">
+                    <span class="absolute top-2 right-2 bg-white/90 px-2 py-1 rounded text-[10px] font-bold text-[var(--olive)] uppercase">Completa</span>
+                </div>
+                <div class="p-4 flex flex-col justify-between flex-1">
+                    <div>
+                        <h3 class="font-bold text-lg text-stone-800 leading-tight">Feijoada no Balde</h3>
+                        <p class="text-[11px] text-stone-500 mb-4 italic">Arroz soltinho, farofa e couve.</p>
+                        <select id="size-feijoada" class="w-full p-2 text-sm border rounded-lg mb-3 bg-stone-50">
+                            <option value="165.00">1.5L (6 Pessoas) - R$ 165,00</option>
+                            <option value="100.00" selected>750ml (3 Pessoas) - R$ 100,00</option>
+                            <option value="70.00">500ml (2 Pessoas) - R$ 70,00</option>
+                            <option value="35.00">250ml (1 Pessoa) - R$ 35,00</option>
+                        </select>
+                    </div>
+                    <button onclick="adicionar('Feijoada', 'size-feijoada')" class="w-full bg-[var(--olive)] text-white py-3 rounded-xl font-bold active:bg-black transition-all text-sm shadow-md">Adicionar à Sacola</button>
+                </div>
+            </div>
+
+            <div class="product-card shadow-sm">
+                <div class="relative">
+                    <img src="image/mocoto.jpg" class="w-full h-40 object-cover">
+                    <span class="absolute top-2 right-2 bg-white/90 px-2 py-1 rounded text-[10px] font-bold text-[var(--olive)] uppercase">Tradicional</span>
+                </div>
+                <div class="p-4 flex flex-col justify-between flex-1">
+                    <div>
+                        <h3 class="font-bold text-lg text-stone-800 leading-tight">Mocotó no Balde</h3>
+                        <p class="text-[11px] text-stone-500 mb-4 italic">Caldo grosso, arroz e farofa especial.</p>
+                        <select id="size-mocoto" class="w-full p-2 text-sm border rounded-lg mb-3 bg-stone-50">
+                            <option value="165.00">1.5L (6 Pessoas) - R$ 165,00</option>
+                            <option value="100.00" selected>750ml (3 Pessoas) - R$ 100,00</option>
+                            <option value="70.00">500ml (2 Pessoas) - R$ 70,00</option>
+                            <option value="35.00">250ml (1 Pessoa) - R$ 35,00</option>
+                        </select>
+                    </div>
+                    <button onclick="adicionar('Mocotó', 'size-mocoto')" class="w-full bg-[var(--olive)] text-white py-3 rounded-xl font-bold active:bg-black transition-all text-sm shadow-md">Adicionar à Sacola</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white/60 p-4 sm:p-8 rounded-2xl border border-stone-200 shadow-inner mb-20">
+        <h2 class="font-serif text-xl text-[var(--olive)] mb-6 text-center italic">Dados de Entrega</h2>
+        
+        <div class="flex gap-2 mb-6">
+            <button id="btn-entrega" onclick="setMetodo('entrega')" class="method-active flex-1 py-3 rounded-xl font-bold border-2 text-[10px] sm:text-xs tracking-wider shadow-sm uppercase">🛵 Entrega</button>
+            <button id="btn-retirada" onclick="setMetodo('retirada')" class="flex-1 py-3 rounded-xl font-bold border-2 border-stone-200 text-stone-400 bg-white text-[10px] sm:text-xs tracking-wider uppercase">🏢 Retirada</button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+                <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Nome do Cliente</label>
+                <input type="text" id="nome" placeholder="Ex: Davi Gomes" class="w-full p-3 rounded-xl border-stone-200 bg-white">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[9px] font-bold text-stone-400 uppercase ml-1">Referência</label>
+                <input type="text" id="ref" placeholder="Ex: Perto da praça" class="w-full p-3 rounded-xl border-stone-200 bg-white">
+            </div>
+            <div class="sm:col-span-2 space-y-3" id="secao-endereco">
+                <button onclick="pegarLocalizacao()" class="w-full bg-white border-2 border-[var(--olive)] text-[var(--olive)] py-3 rounded-xl font-bold text-xs shadow-sm active:scale-95 transition-transform">
+                    📍 Localização via GPS
+                </button>
+                <input type="text" id="endereco" placeholder="Rua, Número e Bairro" class="w-full p-3 rounded-xl border-stone-200 bg-white">
+            </div>
+        </div>
+    </section>
+</div>
 
     <script>
         let sacola = [];
